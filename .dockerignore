@@ -1,0 +1,12 @@
+node_modules 
+coverage 
+test-results.json 
+.git 
+Construye la imagen, ejecuta el contenedor y prueba los endpoints. En PowerShell usa curl.exe en  lugar de curl, o trabaja desde Git Bash. 
+docker build -t gestor-tareas:local . 
+docker run --rm -d --name api -p 3000:3000 gestor-tareas:local 
+curl http://localhost:3000/health 
+curl -X POST http://localhost:3000/tasks -H "Content-Type: application/json" -d  '{"title":"Mi primera tarea"}' 
+curl http://localhost:3000/tasks 
+curl http://localhost:3000/metrics | head -n 20
+docker stop api
