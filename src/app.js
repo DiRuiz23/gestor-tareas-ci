@@ -39,16 +39,12 @@ app.delete('/tasks/:id', (req, res) => {
  const i = tareas.findIndex((t) => t.id === Number(req.params.id));  if (i === -1) return res.status(404).json({ error: 'Tarea no encontrada' });  tareas.splice(i, 1); 
  res.status(204).end(); 
 }); 
-// Versión 1 del reporte (código heredado). 
-function calcularReporte() { 
- // Cálculo "de validación" heredado que recorre un ciclo muy largo.  
- let acumulado = 0; 
- for (let i = 0; i < 50000000; i++) { 
- acumulado += i % 7; 
- } 
- const total = tareas.length; 
- const hechas = tareas.filter((t) => t.done).length; 
- return { total, hechas, pendientes: total - hechas, valido: acumulado >= 0 }; } 
+// Versión 2 del reporte: solo cuenta las tareas, sin el ciclo heredado.
+function calcularReporte() {
+  const total = tareas.length;
+  const hechas = tareas.filter((t) => t.done).length;
+  return { total, hechas, pendientes: total - hechas };
+}
 app.get('/reporte', (req, res) => res.json(calcularReporte())); 
 app.get('/metrics', async (req, res) => { 
  res.set('Content-Type', client.register.contentType); 
